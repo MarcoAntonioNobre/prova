@@ -1,0 +1,145 @@
+include_once("./config/constantes.php");
+include_once("./config/conexao.php");
+include_once("./func/funcoes.php");
+
+$conn = conectar();
+
+
+/////////////FILTRO DE DADOS///////////////////////////////////////////////////
+$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
+
+//////////////////RECEBIMENTO DE DADOS/////////////////////////////////////////
+if (isset($dados) && !empty($dados)) {
+    $carro = isset($dados['inpNomeCarro']) ? addslashes($dados['inpNomeCarro']) : '';
+    $diferenciais = isset($dados['inpDiferenciais']) ? addslashes($dados['inpDiferenciais']) : '';
+    $valor = isset($dados['inpValor']) ? addslashes($dados['inpValor']) : '';
+    $proprietario = isset($dados['selectProprietario']) ? addslashes($dados['selectProprietario']) : '';
+}
+
+
+///////////IF DE CADASTRO DE FOTO//////////////////////////////////////////////
+
+if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+    $fotoTmpName = $_FILES['foto']['tmp_name'];
+    $fotoName = $_FILES['foto']['name'];
+    $uploadDir = 'img';
+    $fotoPath = uniqid() . '_' . $fotoName;
+
+    if (move_uploaded_file($fotoTmpName, $uploadDir . '/' . $fotoPath)) {
+        $retornoInsert = insertGlobal6('carro', 'idproprietario, nomeCarro, diferenciais, fotoPerfil, preco, cadastro', $proprietario, $carro, $diferenciais, $fotoPath, $valor, DATATIMEATUAL);
+
+} else {
+    echo 'Nenhuma imagem enviada!!';
+}
+
+
+//////////RETORNO JSON//////////////////////////////////////////////////////////
+
+if ($retornoInsert > 0) {
+       echo json_encode(['success' => true, 'message' => "Carro $carro cadastrado com sucesso"]);
+   } else {
+       echo json_encode(['success' => false, 'message' => "Carro não cadastrado!"]);
+   }
+} else {
+   echo json_encode((['success' => false, 'message' => 'Carro não encontrado!']));
+}
+
+
+///////////ENVIA A FOTO PELO JAVASCRIPT/////////////////////////////////////////
+
+const fileInput = document.getElementById('ID DO CAMPO QUE RECEBE A FOTO')
+formData.append('foto', fileInput.files[0]);
+
+
+
+
+///////////COMO O LUCIANO ENSINOU A ABRIR MODAL/////////////////////////////////
+
+function abrirModalCarro(idcarro, nome, diferenciais, valor, prop) {
+    const nomeEdit = document.getElementById('inpNomeEditCarro');
+    const diferenciaisEdit = document.getElementById('inpEditDiferenciais');
+    // const fotoEdit = document.getElementById('inpEditFotoCarro');
+    const valorEdit = document.getElementById('inpEditValor');
+    const propEdit = document.getElementById('selectEditProprietario');
+
+    if (nomeEdit) {
+        nomeEdit.focus();
+    }
+    nomeEdit.value = nome;
+    diferenciaisEdit.value = diferenciais;
+    // fotoEdit.value = foto;
+    valorEdit.value = valor;
+    propEdit.value = prop;
+    document.getElementById('idEditCarro').value = idcarro
+    abrirFecharModalCarro('mdlEditCarro', 'A');
+}
+
+function abrirFecharModalCarro(idModal, abrirOuFechar) {
+    const modalInstancia = new bootstrap.Modal(document.getElementById(idModal));
+    if (abrirOuFechar == 'A') {
+        modalInstancia.show();
+    } else {
+        modalInstancia.hide();
+    }
+}
+
+if (document.getElementById('mdlEditCarro')) {
+
+
+    const carroEditModalInstancia = new bootstrap.Modal(document.getElementById('mdlEditCarro'));
+    const carroEditModal = document.getElementById('mdlEditCarro');
+    const inpEditCarro = document.getElementById('inpNomeEditCarro');
+    const btnEditCarro = document.getElementById('btnEditCarro');
+
+    if (carroEditModal) {
+        const form = document.getElementById('frmEditCarro');
+
+        carroEditModal.addEventListener('shown.bs.modal', () => {
+            inpEditCarro.focus();
+            const submitHandler = function (event) {
+                event.preventDefault();
+                btnEditCarro.disabled = true;
+                const form = event.target;
+                const formData = new FormData(form);
+                formData.append('controle', 'carroEdit');
+                fetch('controle.php', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            addOuEditSucesso('Você', 'info', 'editou')
+
+                            btnEditCarro.disabled = false;
+
+                            carroEditModalInstancia.hide();
+                            carregarConteudo('listarCarros');
+                        } else {
+                            carroEditModalInstancia.hide();
+                            btnEditCarro.disabled = false;
+                            addErro()
+                        }
+
+                        // carroEditModal.aria-hidden="true"
+                    })
+            }
+
+            form.addEventListener('submit', submitHandler);
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
