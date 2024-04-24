@@ -58,7 +58,7 @@ function login() {
         });
 }
 
-function mostrarProcessando(){
+function mostrarProcessando() {
     var divFundoEscuro = document.createElement('div');
     divFundoEscuro.id = 'fundoEscuro';
     divFundoEscuro.style.position = 'fixed';
@@ -184,4 +184,24 @@ function abrirModalJsCliente(id, inID, nome, inNome, dataTime, contato, inContat
         ModalInstacia.hide();
     }
 
+}
+
+
+// ----------------------------------------------------------------------------------------------------------------------
+
+
+function busca(busca) {
+    const submitHandler = function (event) {
+        formData.append('pesquisa', `${busca}`)
+        fetch('controle.php', {
+            method: 'POST', body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+
+    }
+
+    formDados.addEventListener('submit', submitHandler);
 }
