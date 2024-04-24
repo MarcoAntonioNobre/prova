@@ -13,7 +13,9 @@
 <body>
 
 <div class="row">
-    <div class="col-md-12"> Buscar Produto</div>
+    <label for="buscarProduto">Buscar produto:</label>
+    <input type="text" name="buscarProduto" id="buscarProduto" class="form-control">
+
 </div>
 <div class="row">
     <div class="col-md-3">Foto</div>
