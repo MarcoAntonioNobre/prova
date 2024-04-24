@@ -37,27 +37,27 @@ include_once "./func/func.php";
                 <div class="col-md-8">
                     <div class="">
                         <label for="codigo" class="label-control">Código:</label>
-                        <input type="text" name="codigo" id="codigo" class="form-control">
+                        <input type="text" name="codigo" id="codigo" class="form-control" placeholder="#">
                     </div>
 
                     <div class="mt-2">
                         <label for="nomeProduto" class="label-control">Nome do produto:</label>
-                        <input type="text" name="nomeProduto" id="nomeProduto" class="form-control">
+                        <input type="text" name="nomeProduto" id="nomeProduto" class="form-control" placeholder="Digite o Nome do Produto">
                     </div>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-md-4">
                     <label for="qtdProduto" class="label-control">Quantidade:</label>
-                    <input type="number" name="qtdProduto" id="qtdProduto" class="form-control">
+                    <input type="number" name="qtdProduto" id="qtdProduto" class="form-control" placeholder="Digite a Quantidade:">
                 </div>
                 <div class="col-md-4">
                     <label for="vlrUnitario" class="label-control">Valor unitário:</label>
-                    <input type="number" name="vlrUnitario" id="vlrUnitario" class="form-control">
+                    <input type="number" name="vlrUnitario" id="vlrUnitario" class="form-control" placeholder="00000">
                 </div>
                 <div class="col-md-4">
                     <label for="vlrTotal" class="label-control">Total:</label>
-                    <input type="number" name="vlrTotal" id="vlrTotal" class="form-control">
+                    <input type="number" name="vlrTotal" id="vlrTotal" class="form-control" placeholder="00000">
                 </div>
             </div>
             <div class="row mt-4">
@@ -76,9 +76,10 @@ include_once "./func/func.php";
                     <table class="table table-hover table-striped table-dark">
                         <thead>
                         <tr>
+                            <th scope="col" width="5%">Cod<span class="mdi mdi-rename-box"></span></th>
                             <th scope="col" width="10%">Nome<span class="mdi mdi-rename-box"></span></th>
-                            <th scope="col" width="5%">QTD<span class="mdi mdi-rename-box"></span></th>
                             <th scope="col" width="8%">V.L.U<span class="mdi mdi-format-list-numbered-rtl"></span></th>
+                            <th scope="col" width="5%">QTD<span class="mdi mdi-rename-box"></span></th>
                             <th scope="col" width="8%">Total<span class="mdi mdi-format-list-numbered-rtl"></span></th>
                             <th scope="col" width="5%">Ações <span class="mdi mdi-database"></span></th>
                         </tr>
@@ -86,31 +87,18 @@ include_once "./func/func.php";
                         <tbody>
 
                         <tr>
-                            <select class="mb-2" id="mySelect" onchange="myFunction()">
-                                <?php
-                                $listarProduto = listarTabela('nome, preco', 'produto');
-                                if ($listarProduto != 'Vazio') {
-                                    foreach ($listarProduto as $itemProduto) {
-                                        $nome = $itemProduto->nome;
-                                        $preco = $itemProduto->preco;
-                                        ?>
-                                        <option value="<?php echo $nome ?>"><?php echo $nome ?></option>
-                                        <?php
-                                    }
-                                } else {
-
-                                ?>
-                            </select>
                             <?php
-                            $listarProduto = listarTabela('nome, preco', 'produto');
+                            $listarProduto = listarTabela('idproduto, nome, preco', 'produto');
                             if ($listarProduto != 'Vazio') {
                             foreach ($listarProduto
 
                             as $itemProduto) {
+                            $idproduto = $itemProduto->idproduto;
                             $nome = $itemProduto->nome;
                             $preco = $itemProduto->preco;
                             ?>
-                            <th scope="row"><?php echo $nome ?></th>
+                            <th scope="row"><?php echo $idproduto ?></th>
+                            <td><?php echo $nome ?></td>
                             <td><?php echo $preco ?></td>
                         </tr>
                         <?php
@@ -124,7 +112,6 @@ include_once "./func/func.php";
                             </tr>
                             <?php
                         }
-                        }
                         ?>
                         </tbody>
                     </table>
@@ -132,23 +119,16 @@ include_once "./func/func.php";
                 <div class="card-footer text-body-secondary">
                     Mensagem de Total
                 </div>
-                <p id="demo"></p>
+
             </div>
         </div>
     </div>
 
 </div>
 
-<<<<<<< HEAD
-=======
 
 
-<script>
-    function myFunction() {
-        var x = document.getElementById("mySelect").value;
-        document.getElementById("demo").innerHTML = "You selected: " + x;
-    }
-</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
@@ -158,18 +138,18 @@ include_once "./func/func.php";
 
 
 <script src="./js/script.js"></script>
->>>>>>> 8740d807b1ffb226b369f2976c2ecfeb5680167c
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
-<<<<<<< HEAD
-<script src="./js/script.js"></script>
-=======
 
->>>>>>> 8740d807b1ffb226b369f2976c2ecfeb5680167c
+<script src="./js/script.js"></script>
+
+
+
 </body>
 </html>
 
